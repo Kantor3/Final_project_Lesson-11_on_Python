@@ -7,6 +7,11 @@ from functools import reduce
 from equ_models import f, Function_us_def
 
 
+def print_interval(info, point, txt_info, sgn):
+    print(f'\n{point}. {txt_info} {info[sgn][0]}')
+    print(*info[sgn][1], sep='\n')
+
+
 # Вывод результаты анализа функции, в т.ч. корни уравнения
 # info_code - что выводим
 #        11 - Вывод информацию о результатах расчета по 1-му пункту
@@ -14,10 +19,6 @@ from equ_models import f, Function_us_def
 #        15 - Вывод информацию о результатах расчета по 5-му пункту
 #        16 - Вывод информацию о результатах расчета по 6 и 7-му пунктам
 def show_result(info, info_code):
-
-    def print_interval(point, txt, sgn):
-        print(f'\n{point}. {txt} {info[sgn][0]}')
-        print(*info[sgn][1], sep='\n')
 
     # 1. Корни уравнения
     if info_code == 11:
@@ -34,8 +35,8 @@ def show_result(info, info_code):
     # {1: ('возрастает', (0, 2, 4)), -1: ('убывает', (1, 3, 5))}
     if info_code == 12:
         txt = 'Интервалы, на которых функция'
-        print_interval(2, txt, 1)
-        print_interval(3, txt, -1)
+        print_interval(info, 2, txt, 1)
+        print_interval(info, 3, txt, -1)
         return
 
     # 5. Вершина функции
@@ -48,8 +49,8 @@ def show_result(info, info_code):
     # 7. Определить промежутки, на которых f < 0
     if info_code == 16:
         txt = 'Промежутки, на которых'
-        print_interval(6, txt, 1)
-        print_interval(7, txt, -1)
+        print_interval(info, 6, txt, 1)
+        print_interval(info, 7, txt, -1)
         return
 
 

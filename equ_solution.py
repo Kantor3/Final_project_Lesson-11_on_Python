@@ -18,7 +18,7 @@ def round_eps(data, eps=EPSILON):
 
 # Формирование списка интервалов между корнями по списку корней
 def get_intervals(roots_l):
-    roots_l.insert(0, chr(INF_cod))                                             # дополняем бесконечностями
+    roots_l.insert(0, f'-{chr(INF_cod)}')                                             # дополняем бесконечностями
     roots_l.append(chr(INF_cod))
     return [f'({rl} ... {rr})' for rl, rr in zip(roots_l[:-1], roots_l[1:])]    # формируем список интервалов
 
@@ -69,11 +69,11 @@ def roots_sep(f_info, br=1):
 
 
 # Поиск корня в интервале (..., b) - Метод секущих
-def secant_method(f, eps, b):
+def secant_method(function, eps, b):
     delta = eps                             # малое положительное число для расчета первой производной
     x0 = b                                  # Начальное приближение
-    f0_div = (f(x0) - f(x0-delta)) / delta  # - крайне левое значение из интервала нахождения корней
-    x1 = x0 - f(x0) / f0_div                # Первое приближение
+    f0_div = (function(x0) - function(x0-delta)) / delta  # - крайне левое значение из интервала нахождения корней
+    x1 = x0 - function(x0) / f0_div                # Первое приближение
 
     # Остальные приближения
     delta = x1 - x0
@@ -85,7 +85,7 @@ def secant_method(f, eps, b):
         xi_2 = xi_1
         xi_1 = xi
         yi_2 = yi_1
-        yi_1 = f(xi_1)
+        yi_1 = function(xi_1)
         delta = xi_1 - xi_2
         if yi_1 == yi_2:
             xi = None                       # больше корней нет
@@ -97,12 +97,12 @@ def secant_method(f, eps, b):
 
 
 # Поиск всех корней
-def roots_interval(f, eps, bi):
+def roots_interval(function, eps, bi):
     save_Function = m.Function_us_def                           # сохраняем исходную функцию
     roots_self = []
     while True:
         bi -= eps
-        root_c = secant_method(f, eps, bi)
+        root_c = secant_method(function, eps, bi)
         bi, i = root_c
         if bi is None:
             m.Function_us_def = save_Function                   # восстанавливаем исходную функцию
