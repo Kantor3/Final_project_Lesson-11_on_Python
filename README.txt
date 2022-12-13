@@ -12,6 +12,32 @@ f(x) = -12x^4 - 18x^3+5x^2 + 10x
 7. Определить промежутки, на котором f < 0
 
 
+"""
+Структура проекта:
+1) main - стартовый (запускающий) модуль - настоящий файл
+2) equ_models - модель данных. Отражение моделей: Уравнение, Расчет, Графическое отражение уравнений
+3) equ_controller - управление процессами расчета и вывода результатов в виде текстовой и графической информации
+4) equ_solution - процедуры подбора подходящих методов и решения уравнений
+5) equ_view - отражение результатов расчета и анализа
+6) equ_plot - графическое отражение функций уравнения и ее производной
+"""
+
+
+"""
+Все расчеты (корни, интервалы, вершины, промежутки и даже определение масштабов графика и интервала вывода)
+выполняются автоматически. Используется только численные методы математического анализа.
+Графика использовалась лишь для визуализации с целью проверки визуальной корректности результатов расчета.
+"""
+
+
+"""
+Функционал позволяет выполнить полностью автоматический анализ для любого алгебраического уравнения.
+Для это необходимо заменить в модуле equ_controller, метод main строку текстового выражения функции уравнения:
+m.Function_us_def = '-12 * x**4 - 18 * x**3 + 5 * x**2 + 10 * x + 0' на нужную.
+Условие: Запись выражения должна отвечать синтаксическому правилу Python.
+"""
+
+
 РЕСУРСЫ:
 ------------
 Численные методы: решение нелинейных уравнений.
@@ -19,6 +45,8 @@ f(x) = -12x^4 - 18x^3+5x^2 + 10x
 в т.ч. нахождения нескольких корней
 
 http://statistica.ru/branches-maths/chislennye-metody-resheniya-uravneniy/#s3
+http://mathhelpplanet.com/static.php?p=metody-resheniya-nelineynykh-uravneniy
+http://statistica.ru/branches-maths/chislennye-metody-resheniya-uravneniy/#s6
 
 Некоторые ссылки на ресурсы по matplotlib:
 https://devpractice.ru/matplotlib-lesson-3-1-work-with-legend/#p1
@@ -26,7 +54,3 @@ https://proproprogs.ru/modules/matplotlib-funkciya-plot-dlya-postroeniya-i-oform
 https://www.geeksforgeeks.org/matplotlib-pyplot-rc-in-python/
 https://pythonru.com/biblioteki/tipy-grafikov-v-matplotlib-plt3
 https://habr.com/ru/post/322954/
-
-
-http://mathhelpplanet.com/static.php?p=metody-resheniya-nelineynykh-uravneniy
-http://statistica.ru/branches-maths/chislennye-metody-resheniya-uravneniy/#s6
