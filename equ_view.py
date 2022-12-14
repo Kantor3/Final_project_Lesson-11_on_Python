@@ -3,7 +3,6 @@ Equ_view.
 Отражение результатов расчета и анализа
 """
 from functools import reduce
-
 from equ_models import f, Function_us_def
 
 

@@ -18,7 +18,7 @@ def round_eps(data, eps=EPSILON):
 
 # Формирование списка интервалов между корнями по списку корней
 def get_intervals(roots_l):
-    roots_l.insert(0, f'-{chr(INF_cod)}')                                             # дополняем бесконечностями
+    roots_l.insert(0, f'-{chr(INF_cod)}')                                       # дополняем бесконечностями
     roots_l.append(chr(INF_cod))
     return [f'({rl} ... {rr})' for rl, rr in zip(roots_l[:-1], roots_l[1:])]    # формируем список интервалов
 
@@ -97,19 +97,21 @@ def secant_method(function, eps, b):
 
 
 # Поиск всех корней
-def roots_interval(function, eps, bi):
+def roots_interval(function, eps, kfs):
+
     save_Function = m.Function_us_def                           # сохраняем исходную функцию
+
+    b_in = (roots_sep(kfs, br=2) + roots_sep(kfs, br=1)) / 2
     roots_self = []
     while True:
-        bi -= eps
-        root_c = secant_method(function, eps, bi)
+        root_c = secant_method(function, eps, b_in)
         bi, i = root_c
         if bi is None:
             m.Function_us_def = save_Function                   # восстанавливаем исходную функцию
             break                                               # больше корней нет
         root_c = round_eps(bi), i                               # корни округляем до точности eps + 1
         roots_self.append(root_c)                               # корни округляем до точности eps + 1
-        m.Function_us_def = f'({m.Function_us_def})/(x - {bi})'     # Отсекаем поиск уже найденных корней
+        m.Function_us_def = f'({m.Function_us_def})/(x - {bi})' # Отсекаем поиск уже найденных корней
     return roots_self
 
 
@@ -117,7 +119,7 @@ def roots_interval(function, eps, bi):
 def create_intervals(roots_ri, n_name_gr, eps=EPSILON):
     # Знак значения функции в точке левее первого корня ее уравнения
     # определяет чередующиеся интервалы + / возрастания и - / убывания
-    roots_r = [r for r, i in roots_ri]
+    roots_r = [r for r, _ in roots_ri]
     roots_r.sort()
     root_min = roots_r[0]
     sgn = int(sign(f(root_min - eps)))
@@ -135,23 +137,28 @@ def create_intervals(roots_ri, n_name_gr, eps=EPSILON):
 
 
 # Определение границ графика для его комфортной визуализации
-def get_comfortable_boundaries(y_top):
+def get_comfortable_boundaries(y_top, kfs):
 
-    save_Function = m.Function_us_def   # сохраняем исходную функцию
-    _, kfs = f(None, what_ret=0)        # получим коэффициенты исходного уравнения
+    save_Function = m.Function_us_def                                   # сохраняем исходную функцию
 
     # Расчет максимальной амплитуды графика для комфортной визуализации графика
     Y_max = abs(y_top * SCALE)
-    Yl = f(roots_sep(kfs, br=2))
-    Yr = f(roots_sep(kfs, br=1))
+    Xl_lim = roots_sep(kfs, br=2)
+    Yl = f(Xl_lim)
+    Xr_lim = roots_sep(kfs, br=1)
+    Yr = f(Xr_lim)
     Y_max_l = min(Y_max, abs(Yl)) * sign(Yl)
     Y_max_r = min(Y_max, abs(Yr)) * sign(Yr)
 
     x = Symbol('x')
-    m.Function_us_def = str(eval(f'{save_Function} - {Y_max_l}'))   # составляем уравнение для нахождения левой границы
-    Xl_lim, _ = secant_method(f, EPSILON, roots_sep(kfs, br=2))     # решение уравнения => левая граница графика
-    m.Function_us_def = str(eval(f'{save_Function} - {Y_max_r}'))   # составляем уравнение для нахождения левой границы
-    Xr_lim, _ = secant_method(f, EPSILON, roots_sep(kfs, br=1))     # решение уравнения => правая граница графика
+
+    if abs(Yl) > abs(Y_max) * SCALE:
+        m.Function_us_def = str(eval(f'{save_Function} - {Y_max_l}'))   # составляем уравнение для нахождения левой границы
+        Xl_lim, _ = secant_method(f, EPSILON, roots_sep(kfs, br=2))     # решение уравнения => левая граница графика
+
+    if abs(Yr) > abs(Y_max) * SCALE:
+        m.Function_us_def = str(eval(f'{save_Function} - {Y_max_r}'))   # составляем уравнение для нахождения левой границы
+        Xr_lim, _ = secant_method(f, EPSILON, roots_sep(kfs, br=1))     # решение уравнения => правая граница графика
 
     m.Function_us_def = save_Function
     return Xl_lim, Xr_lim, STEP

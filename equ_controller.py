@@ -13,11 +13,9 @@ from equ_view import show_info
 
 
 # 1. Определение корней уравнения
-# eps = 0.001 - заданная точность определения корня
 def get_roots(function, f_info, eps=EPSILON):
-    b = roots_sep(f_info)
-    if b is None: return None                                   # Не известная ошибка
-    roots_self = roots_interval(function, eps, b)
+    roots_self = roots_interval(function, eps, f_info)
+    if roots_self is None: return None                                   # Не известная ошибка
     return roots_self
 
 
@@ -30,7 +28,6 @@ def get_roots(function, f_info, eps=EPSILON):
 # ее уравнения, на уровнях этих корней находятся также экстремумы самой функции.
 def get_intervals_id(function, eps=EPSILON):
 
-    # global Function_us_def
     save_Function = m.Function_us_def                                     # сохраняем исходную функцию
 
     # Корни производной
@@ -95,5 +92,5 @@ def main():
     _, intervals_pn = get_intervals_pn(roots_1)
     show_info(code=16, info=intervals_pn, add_info=True)
 
-    rang = get_comfortable_boundaries(peak)
+    rang = get_comfortable_boundaries(peak, kf)
     show_chart(f, f_diff, rng=rang, txt_fx=txt_f, txt_other='Производная')   # график функции
